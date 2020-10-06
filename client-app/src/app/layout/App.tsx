@@ -6,9 +6,12 @@ import NavBar from '../../features/nav/Navbar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
-
+//import ActivityStore from '../stores/activityStore';
+//import { observer } from 'mobx-react-lite';
 
 const App = () => {
+
+    //const activityStore = useContext(ActivityStore)
   
     const[activities, setActivities] = useState<IActivity[]>([]);
     const[selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
