@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Application.Errors;
 using Application.Interfaces;
 using Application.Validators;
-//using Application.Validators;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -73,7 +72,7 @@ namespace Application.User
                         DisplayName = user.DisplayName,
                         Token = _jwtGenerator.CreateToken(user),
                         Username = user.UserName,
-                        Image = null
+                        Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
                     };
                 }
 
