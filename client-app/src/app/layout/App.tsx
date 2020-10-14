@@ -10,10 +10,11 @@ import { observer } from 'mobx-react-lite';
 import ActivityDetails from '../../features/activities/details/ActivitiesDetails';
 import NotFound from './NotFound';
 import { ToastContainer } from 'react-toastify';
-import LoginForm from '../../features/user/LoginForm';
+//import LoginForm from '../../features/user/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import LoadingComponent from './LoadingComponent';
-import ModalContainer from '../common/modals/ModalContainer'
+import ModalContainer from '../common/modals/ModalContainer';
+import ProfilePage from '../../features/profiles/ProfilePage';
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
@@ -47,7 +48,7 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 <Route exact path='/activities' component={ActivityDashboard} />
                 <Route path='/activities/:id' component={ActivityDetails} />
                 <Route key={location.key} path={['/createActivity','/manage/:id']} component={ActivityForm} />
-                <Route path ='/login' component={LoginForm} />
+                <Route path ='/profile/:username' component={ProfilePage} />
                 <Route component={NotFound} />
               </Switch> 
             </Container>
