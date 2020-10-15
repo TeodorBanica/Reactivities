@@ -62,9 +62,9 @@ namespace Application.User
                     Email = request.Email,
                     UserName = request.Username
                 };
-
+                
                 var result = await _userManager.CreateAsync(user, request.Password);
-
+                    
                 if (result.Succeeded)
                 {
                     return new User
@@ -72,7 +72,7 @@ namespace Application.User
                         DisplayName = user.DisplayName,
                         Token = _jwtGenerator.CreateToken(user),
                         Username = user.UserName,
-                        Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
+                        Image = user.Photos?.FirstOrDefault(x => x.IsMain)?.Url
                     };
                 }
 

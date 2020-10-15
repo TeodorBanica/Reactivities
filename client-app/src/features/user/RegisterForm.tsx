@@ -53,7 +53,6 @@ const RegisterForm = () => {
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage
               error={submitError}
-              
             />
           )}
           <Button

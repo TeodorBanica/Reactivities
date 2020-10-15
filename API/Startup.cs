@@ -28,6 +28,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
 using Infrastructure.Photos;
 using Application.Photos;
+using API.SignalR;
 
 namespace API
 {
@@ -54,7 +55,7 @@ namespace API
             services.AddCors(opt =>{
                 opt.AddPolicy("CorsPolicy",policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000").AllowCredentials();
                 });
             });
 
@@ -68,6 +69,7 @@ namespace API
 
             services.AddMediatR(typeof(ListActivities.Handler).Assembly);
             services.AddAutoMapper(typeof(ListActivities.Handler));
+            services.AddSignalR();
 
             var builder = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
@@ -94,6 +96,20 @@ namespace API
                         ValidateAudience = false,
                         ValidateIssuer = false
 
+                };
+                opt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if(!string.IsNullOrEmpty(accessToken) 
+                            && (path.StartsWithSegments("/chat")))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
@@ -125,6 +141,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }
