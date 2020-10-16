@@ -1,25 +1,27 @@
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
 using System;
 using System.Collections.Generic;
-using Domain;
 using System.Threading.Tasks;
 using Application.Activities;
+using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     public class ActivitiesController : BaseController
     {
-
         [HttpGet]
-        public async Task <ActionResult<List<ActivityDto>>> List()
+        public async Task<ActionResult<ListAct.ActivitiesEnvelope>> List(int? limit, 
+            int? offset, bool isGoing, bool isHost, DateTime? startDate)
         {
-            return await Mediator.Send(new ListActivities.Query());
+            return await Mediator.Send(new ListAct.Query(limit, 
+                offset, isGoing, isHost, startDate));
         }
 
         [HttpGet("{id}")]
-        public async Task <ActionResult<ActivityDto>> Details(Guid id)
+        [Authorize]
+        public async Task<ActionResult<ActivityDto>> Details(Guid id)
         {
             return await Mediator.Send(new Details.Query{Id = id});
         }
@@ -27,7 +29,6 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
-
             return await Mediator.Send(command);
         }
 
@@ -52,12 +53,10 @@ namespace API.Controllers
             return await Mediator.Send(new Attend.Command{Id = id});
         }
 
-
         [HttpDelete("{id}/attend")]
         public async Task<ActionResult<Unit>> Unattend(Guid id)
         {
-            return await Mediator.Send(new Delete.Command{Id = id});
+            return await Mediator.Send(new Unattend.Command{Id = id});
         }
-
     }
 }

@@ -68,8 +68,8 @@ namespace API
                 cfg.RegisterValidatorsFromAssemblyContaining<Create>();
             });
 
-            services.AddMediatR(typeof(ListActivities.Handler).Assembly);
-            services.AddAutoMapper(typeof(ListActivities.Handler));
+            services.AddMediatR(typeof(ListAct.Handler).Assembly);
+            services.AddAutoMapper(typeof(ListAct.Handler));
             services.AddSignalR();
 
             var builder = services.AddIdentityCore<AppUser>();
