@@ -65,7 +65,7 @@ export default class ActivityStore {
     this.page = page;
   }
 
-  @action createHubConnection = () => {
+  @action createHubConnection = (activityId: string) => {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(process.env.REACT_APP_API_CHAT_URL!, {
         accessTokenFactory: () => this.rootStore.commonStore.token!
@@ -76,12 +76,20 @@ export default class ActivityStore {
     this.hubConnection
       .start()
       .then(() => console.log(this.hubConnection!.state))
+      .then(() => {
+        console.log('Attempting to join group');
+        this.hubConnection!.invoke('AddToGroup', activityId)
+      })
       .catch(error => console.log('Error establishing connection: ', error));
 
     this.hubConnection.on('ReceiveComment', comment => {
       runInAction(() => {
         this.activity!.comments.push(comment)
       })
+    })
+
+    this.hubConnection.on('Send', message => {
+      toast.info(message);
     })
   };
 
