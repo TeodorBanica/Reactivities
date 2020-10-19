@@ -15,6 +15,9 @@ import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage from '../../features/profiles/ProfilePage';
 import PrivateRoute from './PrivateRoute';
+import RegisterSuccess from '../../features/user/RegisterSuccess';
+import VerifyEmail from '../../features/user/VerifyEmail';
+
 
 const App: React.FC<RouteComponentProps> = ({location}) => {
 
@@ -49,7 +52,9 @@ const App: React.FC<RouteComponentProps> = ({location}) => {
                 <PrivateRoute path='/activities/:id' component={ActivityDetails} />
                 <PrivateRoute key={location.key} path={['/createActivity','/manage/:id']} component={ActivityForm} />
                 <PrivateRoute path ='/profile/:username' component={ProfilePage} />
-                <PrivateRoute component={NotFound} />
+                <Route path='/user/registerSuccess' component={RegisterSuccess} />
+                <Route path='/user/verifyEmail' component={VerifyEmail} />
+                <Route component={NotFound} />
               </Switch> 
             </Container>
           </Fragment>
